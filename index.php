@@ -1,17 +1,10 @@
 <?php
 
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "student_system";
+include_once("connections/connection.php");
 
-$connection = new mysqli($host, $username, $password, $database);
+$connection = connection();
 
-if ($connection->connect_error) {
-    echo $connection->connect_error;
-}
-
-$sql = "SELECT * FROM student_list";
+$sql = "SELECT * FROM student_list ORDER BY id DESC";
 $students = $connection->query($sql) or die($connection->error);
 $row = $students->fetch_assoc();
 
@@ -24,75 +17,14 @@ $row = $students->fetch_assoc();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student System</title>
-
-    <style>
-        body {
-            font-family: "Arial";
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        table {
-            width: 100%;
-            text-align: center;
-            padding: 10px;
-            box-sizing: border-box;
-            background-color: #ffffff;
-            font-size: 16px;
-            border-collapse: collapse;
-            position: relative;
-            left: 0;
-        }
-
-        th,
-        td {
-            text-align: center;
-            padding: 15px;
-            box-sizing: border-box;
-        }
-
-        thead {
-            color: #ffffff;
-            font-weight: normal;
-            background-color: #8f8f8f;
-            border-bottom: solid 2px #d8d8d8;
-            position: sticky;
-            top: 0;
-        }
-
-        td {
-            border: solid 1px #d8d8d8;
-            border-left: 0;
-            border-right: 0;
-            white-space: nowrap;
-        }
-
-        h2 {
-            margin: 0;
-            padding: 0;
-        }
-
-        tbody>tr {
-            transition: background-color 150ms ease-out;
-
-            &:nth-child(2n) {
-                background-color: #f2f2f2;
-            }
-
-            &:hover {
-                background-color: #d0d0d0;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <h1>Student System</h1>
+    <h1>Student Management System</h1>
 
     <br />
-
+    <a href="add.php">Add New Student</a>
     <table>
         <thead>
             <tr>
