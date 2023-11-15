@@ -1,5 +1,4 @@
 <?php
-
 if (!isset($_SESSION)) {
     session_start();
 }
@@ -14,12 +13,18 @@ include_once("connections/connection.php");
 
 $connection = connection();
 
+$id = $_GET['ID'];
+
+$sql = "SELECT * FROM student_list WHERE id = '$id'";
+$students = $connection->query($sql) or die($connection->error);
+$row = $students->fetch_assoc();
+
 if (isset($_POST['submit'])) {
     $fname = $_POST['firstname'];
     $lname = $_POST['lastname'];
     $gender = $_POST['gender'];
 
-    $sql = "INSERT INTO `student_list`(`first_name`, `last_name`, `gender`) VALUES ('$fname','$lname','$gender')";
+    $sql = "UPDATE student_list SET first_name = '$fname', last_name = '$lname', gender = '$gender' WHERE id = '$id'";
 
     $connection->query($sql) or die($connection->error);
 
@@ -38,24 +43,24 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
-    <h1>Create New Student Info</h1>
-
+    <h1>Edit Student Info of <?php echo $row['first_name']; ?></h1>
     <form action="" method="post">
         <label>First Name</label>
-        <input type="text" name="firstname" id="firstname">
+        <input type="text" name="firstname" id="firstname" value="<?php echo $row['first_name']; ?>">
 
         <label>Last Name</label>
-        <input type="text" name="lastname" id="lastname">
+        <input type="text" name="lastname" id="lastname" value="<?php echo $row['last_name']; ?>">
 
         <label>Gender</label>
         <select name="gender" id="gender">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
+            <option value="Male" <?php echo ($row['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
+            <option value="Female" <?php echo ($row['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
+            <option value="Other" <?php echo ($row['gender'] == 'Other') ? 'selected' : ''; ?>>Other</option>
         </select>
 
-        <input type="submit" name="submit" value="Submit Form">
+        <input type="submit" name="submit" value="Update">
     </form>
+
     <a href="index.php">Back</a>
 </body>
 
