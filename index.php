@@ -18,6 +18,13 @@ $sql = "SELECT * FROM student_list ORDER BY id DESC";
 $students = $connection->query($sql) or die($connection->error);
 $row = $students->fetch_assoc();
 
+if (isset($_GET['btn_search'])) {
+    $search = $_GET['search'];
+    $sql = "SELECT * FROM student_list WHERE first_name LIKE '%$search%' || last_name LIKE '%$search%' ORDER BY id DESC";
+    $students = $connection->query($sql) or die($connection->error);
+    $row = $students->fetch_assoc();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -34,6 +41,15 @@ $row = $students->fetch_assoc();
     <h1>Student Management System</h1>
 
     <br>
+
+    <form action="" method="get">
+        <input type="text" name="search" id="search" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+
+        <button type="submit" name="btn_search"> Search</button>
+    </form>
+
+    <br>
+
     <?php if (isset($_SESSION['UserLogin'])) { ?>
         <a href="logout.php">Logout</a>
         <?php if (isset($_SESSION['Access']) && $_SESSION['Access'] == "Admin") { ?>
